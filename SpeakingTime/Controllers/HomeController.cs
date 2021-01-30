@@ -33,5 +33,21 @@ namespace SpeakingTime.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+        public IActionResult Join()
+        {
+            return View();
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        public IActionResult List()
+        {
+            return View();
+        }
     }
 }

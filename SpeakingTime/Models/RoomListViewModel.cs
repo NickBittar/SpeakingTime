@@ -10,5 +10,6 @@ namespace SpeakingTime.Models
     public class RoomListViewModel
     {
         public List<Room> Rooms { get; set; }
+        public List<Connection> Connections { get; set; }
     }
 }

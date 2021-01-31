@@ -14,12 +14,14 @@ namespace SpeakingTime.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IRoomService _roomService;
         private readonly IUserService _userService;
+        private readonly IConnectionService _connectionService;
 
-        public RoomController(ILogger<HomeController> logger, IRoomService roomService, IUserService userService)
+        public RoomController(ILogger<HomeController> logger, IRoomService roomService, IUserService userService, IConnectionService connectionService)
         {
             _logger = logger;
             _roomService = roomService;
             _userService = userService;
+            _connectionService = connectionService;
         }
 
         [HttpGet("r/{id}")]
@@ -45,16 +47,20 @@ namespace SpeakingTime.Controllers
             var room = _roomService.GetRoom(roomInput.RoomId);
             if(room != null)
             {
-                // Create User
-                var user = _userService.CreateUser(roomInput);
+                //// Create User
+                //var user = _userService.CreateUser(roomInput);
 
-                // Add user to room
-                _roomService.AddUserToRoom(roomInput.RoomId, user);
-
+                //// Add user to room
+                //_roomService.AddUserToRoom(roomInput.RoomId, user);
+                
                 // Go to room
                 return RedirectToAction("Room", "Room", new { id = room.RoomId });
             }
-            return View();
+            else
+            {
+                // Room not found
+                return View();
+            }
         }
 
         [HttpGet]
@@ -72,7 +78,8 @@ namespace SpeakingTime.Controllers
         public IActionResult List()
         {
             var rooms = _roomService.GetRooms();
-            var model = new RoomListViewModel { Rooms = rooms };
+            var connections = _connectionService.GetConnections(true);
+            var model = new RoomListViewModel { Rooms = rooms, Connections = connections };
             return View(model);
         }
     }

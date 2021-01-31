@@ -20,8 +20,8 @@ namespace SpeakingTime.Services
         {
             var user = new User
             {
-                Name = input.UserName,
-                Color = input.UserColor,
+                Name = input.Name,
+                Color = input.Color,
 
                 CreatedDateTime = DateTime.UtcNow,
                 UpdatedDateTime = DateTime.UtcNow,

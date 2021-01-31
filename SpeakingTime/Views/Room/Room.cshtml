@@ -1,8 +1,34 @@
-﻿@model RoomViewModel; 
+﻿@model RoomViewModel;
+@using System.Text.Json; 
 @{
     ViewData["Title"] = "Room";
 }
+@section Styles {
+    <link href="~/css/room.css" rel="stylesheet" />
+}
+@section Scripts {
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/room.js"></script>
+}
 <div>
     <h3>@ViewData["Title"] - @Model.RoomName</h3>
+
+    <div id="create-user" class="create-user-container">
+        <form id="create-user-form">
+            <input id="room-id" type="hidden" value="@Model.RoomId" />
+            <div class="mb-3">
+                <label for="user-name-input" class="form-label">Your Name</label>
+                <input type="text" class="form-control" id="user-name-input">
+            </div>
+            <div class="mb-3">
+                <label for="user-color-input" class="form-label">Your Color</label>
+                <input type="color" class="form-control" id="user-color-input">
+            </div>
+            <button id="create-user-btn" class="btn btn-outline-success">Join</button>
+        </form>
+    </div>
+    <div id="room" class="room-container hidden">
+        THE ROOM
+    </div>
 
 </div>

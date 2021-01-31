@@ -26,6 +26,13 @@ namespace SpeakingTime.Services
                 .FirstOrDefault(r => r.RoomId == roomId);
             if(room != null)
             {
+                // If no one else in room, make owner
+                if (room.Users.Count == 0)
+                {
+                    room.OwnerUserId = user.Id;
+                    room.OwnerUser = user;
+                }
+                // Add to room's user list
                 room.Users.Add(user);
             }
             DbContext.SaveChanges();
@@ -33,26 +40,26 @@ namespace SpeakingTime.Services
 
         public Room CreateRoom(CreateRoomInputModel input)
         {
-            // Create User
-            var user = new User
-            {
-                Name = input.UserName,
-                Color = input.UserColor,
+            //// Create User
+            //var user = new User
+            //{
+            //    Name = input.UserName,
+            //    Color = input.UserColor,
 
-                CreatedDateTime = DateTime.UtcNow,
-                UpdatedDateTime = DateTime.UtcNow,
-            };
-            DbContext.Users.Add(user);
+            //    CreatedDateTime = DateTime.UtcNow,
+            //    UpdatedDateTime = DateTime.UtcNow,
+            //};
+            //DbContext.Users.Add(user);
 
-            DbContext.SaveChanges();
+            //DbContext.SaveChanges();
 
             // Map input to new room
             var room = new Room
             {
                 RoomName = input.RoomName,
-                OwnerUserId = user.Id,
-                OwnerUser = user,
-                Users = new List<User> { user },
+                //OwnerUserId = user.Id,
+                //OwnerUser = user,
+                Users = new List<User>(),
 
                 CreatedDateTime = DateTime.UtcNow,
                 UpdatedDateTime = DateTime.UtcNow,

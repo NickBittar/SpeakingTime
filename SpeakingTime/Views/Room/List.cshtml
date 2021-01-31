@@ -13,6 +13,7 @@
                 <th>Room Name</th>
                 <th>Owner</th>
                 <th>Users</th>
+                <th>Connections</th>
                 <th>Created Datetime</th>
                 <th>Updated Datetime</th>
                 <th>Deleted Datetime</th>
@@ -27,6 +28,7 @@
                 <td>@room.RoomName</td>
                 <td>@room.OwnerUser?.Name</td>
                 <td>@room.Users?.Count</td>
+                <td>@Model.Connections.Count(c => c.RoomId == room.Id && c.DeletedDateTime == null) / @Model.Connections.Count(c => c.RoomId == room.Id)</td>
                 <td>@room.CreatedDateTime.ToString()</td>
                 <td>@room.UpdatedDateTime.ToString()</td>
                 <td>@room.DeletedDateTime?.ToString()</td>

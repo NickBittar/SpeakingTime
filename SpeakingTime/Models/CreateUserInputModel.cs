@@ -7,7 +7,7 @@ namespace SpeakingTime.Models
 {
     public class CreateUserInputModel
     {
-        public string UserName { get; set; }
-        public string UserColor { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
     }
 }

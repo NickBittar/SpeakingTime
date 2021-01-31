@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SpeakingTime.Hubs;
 
 namespace SpeakingTime
 {
@@ -30,6 +31,9 @@ namespace SpeakingTime
             services.AddDbContext<SpeakingTimeDbContext>(options => options.UseInMemoryDatabase(databaseName: "SpeakingTime"));
             services.AddTransient<IRoomService, RoomService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IConnectionService, ConnectionService>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +61,7 @@ namespace SpeakingTime
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<RoomHub>("/roomhub");
             });
         }
     }

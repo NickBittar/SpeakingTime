@@ -23,17 +23,5 @@ namespace SpeakingTime.Controllers
         {
             return View();
         }
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Create(CreateUserInputModel userInput)
-        {
-            var user = _userService.CreateUser(userInput);
-            return View();
-        }
     }
 }

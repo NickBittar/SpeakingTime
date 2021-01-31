@@ -40,25 +40,11 @@ namespace SpeakingTime.Services
 
         public Room CreateRoom(CreateRoomInputModel input)
         {
-            //// Create User
-            //var user = new User
-            //{
-            //    Name = input.UserName,
-            //    Color = input.UserColor,
-
-            //    CreatedDateTime = DateTime.UtcNow,
-            //    UpdatedDateTime = DateTime.UtcNow,
-            //};
-            //DbContext.Users.Add(user);
-
-            //DbContext.SaveChanges();
-
             // Map input to new room
             var room = new Room
             {
                 RoomName = input.RoomName,
-                //OwnerUserId = user.Id,
-                //OwnerUser = user,
+
                 Users = new List<User>(),
 
                 CreatedDateTime = DateTime.UtcNow,

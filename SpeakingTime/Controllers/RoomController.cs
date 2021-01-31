@@ -47,12 +47,6 @@ namespace SpeakingTime.Controllers
             var room = _roomService.GetRoom(roomInput.RoomId);
             if(room != null)
             {
-                //// Create User
-                //var user = _userService.CreateUser(roomInput);
-
-                //// Add user to room
-                //_roomService.AddUserToRoom(roomInput.RoomId, user);
-                
                 // Go to room
                 return RedirectToAction("Room", "Room", new { id = room.RoomId });
             }

@@ -11,6 +11,7 @@ namespace SpeakingTime.Services
     {
         List<Room> GetRooms();
         Room GetRoom(string roomId);
+        Room GetRoom(int id);
         Room CreateRoom(CreateRoomInputModel input);
         void AddUserToRoom(string roomId, User user);
     }

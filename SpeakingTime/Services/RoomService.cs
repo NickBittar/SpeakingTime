@@ -84,6 +84,11 @@ namespace SpeakingTime.Services
                 .FirstOrDefault(r => r.RoomId == roomId);
         }
 
+        public Room GetRoom(int id)
+        {
+            return DbContext.Rooms.FirstOrDefault(r => r.Id == id);
+        }
+
         public List<Room> GetRooms()
         {
             var rooms = DbContext.Rooms

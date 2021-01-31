@@ -1,4 +1,5 @@
-﻿using SpeakingTime.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SpeakingTime.Data;
 using SpeakingTime.Data.Models;
 using SpeakingTime.Models;
 using System;
@@ -46,6 +47,7 @@ namespace SpeakingTime.Services
         public List<User> GetUsersInRoom(string roomId)
         {
             var room = DbContext.Rooms
+                .Include(r => r.Users)
                 .FirstOrDefault(r => r.RoomId == roomId);
             if(room != null)
             {

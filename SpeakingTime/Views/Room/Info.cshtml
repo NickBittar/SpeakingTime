@@ -1,0 +1,93 @@
+﻿@model RoomInfoViewModel;
+@{
+    ViewData["Title"] = "Room info";
+}
+<div>
+    <h3>@ViewData["Title"]</h3>
+    
+    <div>
+        <div>
+            <table class="table table-responsive">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td><span class="font-weight-bold">@Model.Room.Id</span></td>
+                    </tr>
+                    <tr>
+                        <th>Room ID</th>
+                        <td><a class="font-weight-bold" asp-controller="Room" asp-action="Room" asp-route-id="@Model.Room.RoomId">@Model.Room.RoomId</a></td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>@Model.Room.RoomName</td>
+                    </tr>
+                    <tr>
+                        <th>Owner</th>
+                        <td><div class="color-tag" style="background-color: @Model.Room.OwnerUser?.Color;"></div> @Model.Room.OwnerUser?.Name</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+
+        <div>
+            @Model.Users.Count Users
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Color</th>
+                        <th>Created Datetime</th>
+                        <th>Updated Datetime</th>
+                        <th>Deleted Datetime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var user in Model.Users)
+                    {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.Name</td>
+                        <td><span class="black-outlined color-tag code" style="background-color: @user.Color;">@user.Color</span></td>
+                        <td>@user.CreatedDateTime.ToString()</td>
+                        <td>@user.UpdatedDateTime.ToString()</td>
+                        <td>@user.DeletedDateTime?.ToString()</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <hr />
+        <div>
+            @Model.Connections.Count(c => c.DeletedDateTime == null)/@Model.Connections.Count Connections
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Connection Id</th>
+                        <th>User Id</th>
+                        <th>User Name</th>
+                        <th>Created Datetime</th>
+                        <th>Updated Datetime</th>
+                        <th>Deleted Datetime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var connection in Model.Connections)
+                    {
+                    <tr>
+                        <td>@connection.Id</td>
+                        <td>@connection.ConnectionId</td>
+                        <td>@connection.UserId</td>
+                        <td><div class="color-tag" style="background-color: @connection.User?.Color;"></div> @connection.User?.Name</td>
+                        <td>@connection.CreatedDateTime.ToString()</td>
+                        <td>@connection.UpdatedDateTime.ToString()</td>
+                        <td>@connection.DeletedDateTime?.ToString()</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -82,5 +82,17 @@ namespace SpeakingTime.Controllers
             var model = new RoomListViewModel { Rooms = rooms, Connections = connections };
             return View(model);
         }
+
+        public IActionResult Info(int id)
+        {
+            var room = _roomService.GetRoom(id);
+            var model = new RoomInfoViewModel
+            {
+                Room = room,
+                Users = _userService.GetUsersInRoom(room.RoomId),
+                Connections = _connectionService.GetRoomConnections(room.RoomId, true),
+            };
+            return View(model);
+        }
     }
 }

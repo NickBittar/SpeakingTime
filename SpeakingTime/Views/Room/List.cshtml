@@ -23,12 +23,12 @@
             @foreach(var room in Model.Rooms)
             {
             <tr>
-                <td>@room.Id</td>
-                <td><a asp-controller="Room" asp-action="Room" asp-route-id="@room.RoomId">@room.RoomId</a></td>
+                <td><a class="font-weight-bold" asp-controller="Room" asp-action="Info" asp-route-id="@room.Id">@room.Id</a></td>
+                <td><a class="font-weight-bold" asp-controller="Room" asp-action="Room" asp-route-id="@room.RoomId">@room.RoomId</a></td>
                 <td>@room.RoomName</td>
                 <td>@room.OwnerUser?.Name</td>
                 <td>@room.Users?.Count</td>
-                <td>@Model.Connections.Count(c => c.RoomId == room.Id && c.DeletedDateTime == null) / @Model.Connections.Count(c => c.RoomId == room.Id)</td>
+                <td>@Model.Connections.Count(c => c.RoomId == room.Id && c.DeletedDateTime == null)/@Model.Connections.Count(c => c.RoomId == room.Id)</td>
                 <td>@room.CreatedDateTime.ToString()</td>
                 <td>@room.UpdatedDateTime.ToString()</td>
                 <td>@room.DeletedDateTime?.ToString()</td>

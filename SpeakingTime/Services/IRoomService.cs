@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpeakingTime.Services
 {
-    interface IRoomService
+    public interface IRoomService
     {
         List<Room> GetRooms();
         Room GetRoom(string roomId);

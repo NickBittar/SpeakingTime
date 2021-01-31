@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpeakingTime.Data;
+using SpeakingTime.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace SpeakingTime
         {
             services.AddControllersWithViews();
             services.AddDbContext<SpeakingTimeDbContext>(options => options.UseInMemoryDatabase(databaseName: "SpeakingTime"));
+            services.AddTransient<IRoomService, RoomService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

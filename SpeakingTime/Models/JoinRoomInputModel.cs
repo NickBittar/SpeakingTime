@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace SpeakingTime.Models
 {
-    public class CreateUserInputModel
+    public class JoinRoomInputModel : CreateUserInputModel
     {
-        public string UserName { get; set; }
-        public string UserColor { get; set; }
+        public string RoomId { get; set; }
     }
 }

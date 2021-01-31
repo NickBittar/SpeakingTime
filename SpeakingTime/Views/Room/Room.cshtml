@@ -1,7 +1,8 @@
-﻿@{
+﻿@model RoomViewModel; 
+@{
     ViewData["Title"] = "Room";
 }
 <div>
-    <h3>@ViewData["Title"]</h3>
+    <h3>@ViewData["Title"] - @Model.RoomName</h3>
 
 </div>

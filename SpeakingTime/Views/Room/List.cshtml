@@ -1,0 +1,37 @@
+﻿@model RoomListViewModel
+@{
+    ViewData["Title"] = "List of rooms";
+}
+<div>
+    <h3>@ViewData["Title"] - @Model.Rooms.Count Rooms</h3>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Room Id</th>
+                <th>Room Name</th>
+                <th>Owner</th>
+                <th>Users</th>
+                <th>Created Datetime</th>
+                <th>Updated Datetime</th>
+                <th>Deleted Datetime</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var room in Model.Rooms)
+            {
+            <tr>
+                <td>@room.Id</td>
+                <td><a asp-controller="Room" asp-action="Room" asp-route-id="@room.RoomId">@room.RoomId</a></td>
+                <td>@room.RoomName</td>
+                <td>@room.OwnerUser?.Name</td>
+                <td>@room.Users?.Count</td>
+                <td>@room.CreatedDateTime.ToString()</td>
+                <td>@room.UpdatedDateTime.ToString()</td>
+                <td>@room.DeletedDateTime?.ToString()</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

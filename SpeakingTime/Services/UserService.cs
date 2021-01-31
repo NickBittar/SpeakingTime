@@ -20,10 +20,16 @@ namespace SpeakingTime.Services
         {
             var user = new User
             {
-                Name = input.Name,
-                Color = input.Color,
+                Name = input.UserName,
+                Color = input.UserColor,
+
+                CreatedDateTime = DateTime.UtcNow,
+                UpdatedDateTime = DateTime.UtcNow,
             };
             DbContext.Users.Add(user);
+
+            DbContext.SaveChanges();
+
             return user;
         }
 
@@ -39,7 +45,8 @@ namespace SpeakingTime.Services
 
         public List<User> GetUsersInRoom(string roomId)
         {
-            var room = DbContext.Rooms.FirstOrDefault(r => r.RoomId == roomId);
+            var room = DbContext.Rooms
+                .FirstOrDefault(r => r.RoomId == roomId);
             if(room != null)
             {
                 return room.Users;

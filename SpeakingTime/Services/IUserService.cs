@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpeakingTime.Services
 {
-    interface IUserService
+    public interface IUserService
     {
         List<User> GetUsers();
         List<User> GetUsersInRoom(string roomId);

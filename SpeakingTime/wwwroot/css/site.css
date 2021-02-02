@@ -37,8 +37,7 @@ body {
     text-shadow: 0.05em 0 white, 0 0.05em white, -0.05em 0 white, 0 -0.05em white, -0.05em -0.05em white, -0.05em 0.05em white, 0.05em -0.05em white, 0.05em 0.05em white;
 }
 .color-tag {
-    outline: 1px solid white;
-    border: 1px solid black;
+    box-shadow: 0px 0px 0px 1px black, 0px 0px 0px 2px white;
     font-weight: bold;
     text-align: center;
     margin: -2px 0px;
@@ -46,5 +45,6 @@ body {
     display: inline-block;
     min-height: 1em;
     min-width: 1em;
+    border-radius: 2px;
 }
 

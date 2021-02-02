@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using SpeakingTime.Data.Models;
 using SpeakingTime.Models;
 using SpeakingTime.Services;
 using System;
@@ -20,21 +21,31 @@ namespace SpeakingTime.Hubs
             _connectionService = connectionService;
         }
 
-        public async Task JoinRoom(CreateUserInputModel user, string roomId)
+        public async Task JoinRoom(CreateUserInputModel userInput, string roomId)
         {
-            // Create user and add to room
-            var userEntity = _userService.CreateUser(user);
-            _roomService.AddUserToRoom(roomId, userEntity);
+            User user;
+            if(userInput.Id.HasValue)
+            {
+                user = _userService.GetUser(userInput.Id.Value);
+            } 
+            else
+            {
+                // Create user and add to room
+                user = _userService.CreateUser(userInput);
+                _roomService.AddUserToRoom(roomId, user);
+            }
+
             // Add connection
             var room = _roomService.GetRoom(roomId);
-            _connectionService.AddConnection(userEntity, room, Context.ConnectionId);
+            _connectionService.AddConnection(user, room, Context.ConnectionId);
             var connections = _connectionService.GetRoomConnections(roomId);
 
-            await Clients.Group(roomId).SendAsync("UserJoin", new { User = userEntity });
+            await Clients.Group(roomId).SendAsync("UserJoin", new { user });
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-            await Clients.Caller.SendAsync("AllowedIn");
+            await Clients.Caller.SendAsync("AllowedIn", user);
             await Clients.Caller.SendAsync("UserList", connections.Select(c => c.User).ToList());
         }
+
         public async Task SendMessage(string user, string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", user, message);

@@ -11,9 +11,9 @@
     <script src="~/js/room.js"></script>
 }
 <div>
-    <h3>@ViewData["Title"] - @Model.RoomName</h3>
+    <h3>@ViewData["Title"] - @Model.RoomName <button id="reload-room-btn" class="btn btn-outline-primary">Reload</button><button id="leave-room-btn" class="btn btn-outline-danger">Leave</button></h3>
 
-    <div id="create-user" class="create-user-container">
+    <div id="create-user" class="create-user-container hidden">
         <form id="create-user-form">
             <input id="room-id" type="hidden" value="@Model.RoomId" />
             <div class="mb-3">
@@ -28,7 +28,28 @@
         </form>
     </div>
     <div id="room" class="room-container hidden">
-        THE ROOM
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-4">
+                <div id="room-user-list" class="d-grid gap-2">
+                </div>
+            </div>
+        </div>
     </div>
 
+</div>
+
+<div id="templates" class="d-none">
+    <div id="user-list-item-template">
+        <div class="p-2 bg-light shadow-sm row">
+            <div class="user-list-item-name col"></div>
+            <div class="col">
+                <button class="btn btn-outline-primary"><i class="bi bi-megaphone"></i></button>
+            </div>
+            <div class="col">
+                <button class="btn btn-outline-secondary" title="Promote to owner"><i class="bi bi-star"></i></button>
+                <button class="btn btn-outline-danger" title="Kick"><i class="bi bi-person-x"></i></button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -23,7 +23,7 @@
                     </tr>
                     <tr>
                         <th>Owner</th>
-                        <td><div class="color-tag font-monospace" style="background-color: @Model.Room.OwnerUser?.Color;"></div> @Model.Room.OwnerUser?.Name</td>
+                        <td><div class="color-tag" style="background-color: @Model.Room.OwnerUser?.Color;"></div> @Model.Room.OwnerUser?.Name</td>
                     </tr>
                 </tbody>
             </table>
@@ -49,7 +49,7 @@
                     <tr>
                         <td>@user.Id</td>
                         <td>@user.Name</td>
-                        <td><span class="black-outlined color-tag" style="background-color: @user.Color;">@user.Color</span></td>
+                        <td><span class="black-outlined color-tag font-monospace" style="background-color: @user.Color;">@user.Color</span></td>
                         <td>@user.CreatedDateTime.ToString()</td>
                         <td>@user.UpdatedDateTime.ToString()</td>
                         <td>@user.DeletedDateTime?.ToString()</td>

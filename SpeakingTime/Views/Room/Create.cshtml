@@ -7,9 +7,9 @@
     <hr />
     <div>
         <form asp-controller="Room" asp-action="Create" method="post">
-            <div class="mb-3">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="room-name-input" asp-for="RoomName" placeholder="Room Name">
                 <label for="room-name-input" class="form-label">Room Name</label>
-                <input type="text" class="form-control" id="room-name-input" asp-for="RoomName">
             </div>
             <button type="submit" class="btn btn-success">Create</button>
         </form>

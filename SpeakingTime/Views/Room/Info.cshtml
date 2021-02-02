@@ -11,11 +11,11 @@
                 <tbody>
                     <tr>
                         <th>Id</th>
-                        <td><span class="font-weight-bold">@Model.Room.Id</span></td>
+                        <th>@Model.Room.Id</th>
                     </tr>
                     <tr>
                         <th>Room ID</th>
-                        <td><a class="font-weight-bold" asp-controller="Room" asp-action="Room" asp-route-id="@Model.Room.RoomId">@Model.Room.RoomId</a></td>
+                        <th><a asp-controller="Room" asp-action="Room" asp-route-id="@Model.Room.RoomId">@Model.Room.RoomId</a></th>
                     </tr>
                     <tr>
                         <th>Name</th>
@@ -23,7 +23,7 @@
                     </tr>
                     <tr>
                         <th>Owner</th>
-                        <td><div class="color-tag" style="background-color: @Model.Room.OwnerUser?.Color;"></div> @Model.Room.OwnerUser?.Name</td>
+                        <td><div class="color-tag font-monospace" style="background-color: @Model.Room.OwnerUser?.Color;"></div> @Model.Room.OwnerUser?.Name</td>
                     </tr>
                 </tbody>
             </table>
@@ -32,7 +32,7 @@
 
         <div>
             @Model.Users.Count Users
-            <table class="table table-striped">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -49,7 +49,7 @@
                     <tr>
                         <td>@user.Id</td>
                         <td>@user.Name</td>
-                        <td><span class="black-outlined color-tag code" style="background-color: @user.Color;">@user.Color</span></td>
+                        <td><span class="black-outlined color-tag" style="background-color: @user.Color;">@user.Color</span></td>
                         <td>@user.CreatedDateTime.ToString()</td>
                         <td>@user.UpdatedDateTime.ToString()</td>
                         <td>@user.DeletedDateTime?.ToString()</td>
@@ -61,7 +61,7 @@
         <hr />
         <div>
             @Model.Connections.Count(c => c.DeletedDateTime == null)/@Model.Connections.Count Connections
-            <table class="table table-striped">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>Id</th>

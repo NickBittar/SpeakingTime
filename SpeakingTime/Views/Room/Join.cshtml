@@ -1,15 +1,15 @@
 ﻿@model JoinRoomInputModel;
 @{
-    ViewData["Title"] = "Join the room";
+    ViewData["Title"] = "Join room";
 }
 <div>
     <h3>@ViewData["Title"]</h3>
     <hr />
     <div>
         <form asp-controller="Room" asp-action="Join" method="post">
-            <div class="mb-3">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="room-id-input" asp-for="RoomId" placeholder="Room Id">
                 <label for="room-id-input" class="form-label">Room Id</label>
-                <input type="text" class="form-control" id="room-id-input" asp-for="RoomId">
             </div>
             <button type="submit" class="btn btn-success">Join</button>
         </form>

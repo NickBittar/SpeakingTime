@@ -46,9 +46,9 @@ namespace SpeakingTime.Hubs
             await Clients.Caller.SendAsync("UserList", connections.Select(c => c.User).ToList());
         }
 
-        public async Task SendMessage(string user, string message)
+        public async Task SendMessage(int userId, string message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            await Clients.All.SendAsync("ReceiveMessage", userId, message);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)

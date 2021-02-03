@@ -29,7 +29,22 @@
     </div>
     <div id="room" class="room-container hidden">
         <div class="row">
-            <div class="col"></div>
+            <div class="col-4 bg-dark">
+
+            </div>
+            <div class="col-4">
+                <div class="chat-box">
+                    <div id="chat-messages">
+                        
+                    </div>
+                    <div class="chat-text-box-container">
+                        <div class="input-group mb-3">
+                            <input type="text" id="chat-text-box" class="form-control" placeholder="Type something..." />
+                            <button class="btn btn-outline-secondary" type="button" id="chat-text-box-btn"><i class="bi bi-chat-dots"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-4">
                 <div id="room-user-list" class="d-grid gap-2">
                 </div>
@@ -41,7 +56,7 @@
 
 <div id="templates" class="d-none">
     <div id="user-list-item-template">
-        <div class="p-2 bg-light shadow-sm row">
+        <div class="user-list-item p-2 bg-light shadow-sm row">
             <div class="user-list-item-name col"></div>
             <div class="col">
                 <button class="btn btn-outline-primary"><i class="bi bi-megaphone"></i></button>
@@ -50,6 +65,17 @@
                 <button class="btn btn-outline-secondary" title="Promote to owner"><i class="bi bi-star"></i></button>
                 <button class="btn btn-outline-danger" title="Kick"><i class="bi bi-person-x"></i></button>
             </div>
+        </div>
+    </div>
+    <div id="chat-message-template">
+        <div class="chat-item chat-message shadow-sm">
+            <span class="chat-message-user color-tag black-outlined"></span> <span class="chat-message-text"></span>
+        </div>
+    </div>
+
+    <div id="chat-signal-template">
+        <div class="chat-item chat-signal shadow-sm">
+            <span class="chat-message-signal-text color-tag white-outlined"></span>
         </div>
     </div>
 </div>

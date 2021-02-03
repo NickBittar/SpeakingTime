@@ -48,3 +48,40 @@ body {
     border-radius: 2px;
 }
 
+.user-list-item.current-user {
+    font-weight: bold;
+}
+
+#chat-messages {
+    height: 400px;
+    overflow-y: scroll;
+    flex-direction: column-reverse;
+    display: flex;
+}
+.chat-text-box-container {
+    padding: 4px;
+    padding-top: 10px;
+}
+.chat-item {
+    background-color: white;
+}
+.chat-message {
+    margin: 4px;
+    padding: 4px;
+}
+.chat-signal {
+    margin: 8px;
+    font-style: italic;
+    align-self: flex-start;
+}
+.chat-message-user.color-tag {
+    transition: box-shadow 100ms ease;
+    text-align: initial;
+    cursor: pointer;
+}
+.chat-message-user.color-tag:hover {
+    box-shadow: 0px 0px 0px 1px white, 0px 0px 0px 2px black, 0 0 0 3px white;
+}
+.chat-message-user.color-tag:active {
+    box-shadow: 0px 0px 0px 1px black, 0px 0px 0px 2px white, 0 0 0 3px black;
+}

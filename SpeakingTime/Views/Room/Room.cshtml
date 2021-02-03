@@ -1,10 +1,11 @@
 ﻿@model RoomViewModel;
-@using System.Text.Json; 
+@using System.Text.Json;
 @{
     ViewData["Title"] = "Room";
 }
 @section Styles {
     <link href="~/css/room.css" rel="stylesheet" />
+    <link href="~/css/emotes.css" rel="stylesheet" />
 }
 @section Scripts {
     <script src="~/lib/signalr/dist/browser/signalr.js"></script>
@@ -35,11 +36,23 @@
             <div class="col-4">
                 <div class="chat-box">
                     <div id="chat-messages">
-                        
+
+                        <div class="chat-item chat-message shadow-sm">
+                            <span class="chat-message-user color-tag black-outlined" style="background-color: black;">Test</span>
+                            <span class="chat-message-text">
+                                This is a test
+                                <span class="emote LUL" title="LUL">LUL</span>
+                                <span class="emote Wowee" title="Wowee">Wowee</span>
+                                <span class="emote OMEGALUL" title="OMEGALUL">OMEGALUL</span>
+                                <span class="emote PepoTurkey" title="PepoTurkey">PepoTurkey</span>
+                            </span>
+                        </div>
+
                     </div>
                     <div class="chat-text-box-container">
                         <div class="input-group mb-3">
                             <input type="text" id="chat-text-box" class="form-control" placeholder="Type something..." />
+                            <button class="btn btn-outline-secondary" type="button" id="chat-text-box-btn"><i class="bi bi-emoji-smile"></i></button>
                             <button class="btn btn-outline-secondary" type="button" id="chat-text-box-btn"><i class="bi bi-chat-dots"></i></button>
                         </div>
                     </div>

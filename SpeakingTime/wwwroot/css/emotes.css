@@ -1,0 +1,129 @@
+﻿
+.emote {
+    z-index: 1;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    text-indent: -999em;
+}
+
+.chat-message-text .emote.LUL {
+    margin-top: -30px;
+    top: 7.5px;
+}
+
+.emote.LUL {
+    background-image: url('/res/emotes/LUL.png');
+    height: 30px;
+    width: 36px;
+}
+
+.chat-message-text .emote.Wowee {
+    margin-top: -30px;
+    top: 7.5px;
+}
+
+.emote.Wowee {
+    background-image: url('/res/emotes/Wowee.png');
+    height: 30px;
+    width: 30px;
+}
+
+.chat-message-text .emote.OMEGALUL {
+    margin-top: -32px;
+    top: 8px;
+}
+
+.emote.OMEGALUL {
+    background-image: url('/res/emotes/OMEGALUL.png');
+    height: 32px;
+    width: 31px;
+}
+
+.chat-message-text .emote.PepoTurkey {
+    margin-top: -28px;
+    top: 7px;
+}
+
+.emote.PepoTurkey {
+    animation: PepoTurkey-anim 0.7s 1;
+    background-image: url('/res/emotes/PepoTurkey.png');
+    height: 28px;
+    width: 34px;
+}
+
+@keyframes PepoTurkey-anim {
+    0% {
+        transform: translate(0px, 0px);
+    }
+
+    25% {
+        transform: translate(0px, -7.5px) rotate(-3deg);
+        animation-timing-function: ease
+    }
+
+    37% {
+        transform: translate(0px, 0px) rotate(-3deg);
+        animation-timing-function: ease-in
+    }
+
+    55% {
+        transform: translate(0px, -3px) rotate(4deg);
+        animation-timing-function: ease
+    }
+
+    60% {
+        transform: translate(0px, 0px) rotate(4deg);
+        animation-timing-function: ease-in
+    }
+
+    75% {
+        transform: translate(0px, -1.5px);
+        animation-timing-function: ease
+    }
+
+    100% {
+        transform: translate(0px, 0px);
+        animation-timing-function: ease-in
+    }
+}
+
+@keyframes PepoTurkey-anim-hover {
+    0% {
+        transform: translate(0px, 0px);
+    }
+
+    25% {
+        transform: translate(0px, -7.5px) rotate(-3deg);
+        animation-timing-function: ease
+    }
+
+    37% {
+        transform: translate(0px, 0px) rotate(-3deg);
+        animation-timing-function: ease-in
+    }
+
+    55% {
+        transform: translate(0px, -3px) rotate(4deg);
+        animation-timing-function: ease
+    }
+
+    60% {
+        transform: translate(0px, 0px) rotate(4deg);
+        animation-timing-function: ease-in
+    }
+
+    75% {
+        transform: translate(0px, -1.5px);
+        animation-timing-function: ease
+    }
+
+    100% {
+        transform: translate(0px, 0px);
+        animation-timing-function: ease-in
+    }
+}
+
+.emote.PepoTurkey:hover {
+    animation: PepoTurkey-anim-hover 0.7s infinite;
+}

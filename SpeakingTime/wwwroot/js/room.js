@@ -38,6 +38,8 @@ document.getElementById('chat-text-box-btn').addEventListener('click', sendChatM
 
 // User list
 let users = [];
+const emotes = ['LUL', 'Wowee', 'OMEGALUL', 'PepoTurkey'];
+const emoteRegex = new RegExp('\\b(' + emotes.join('|') + ')\\b', 'g');
 
 let currentUser = null;
 
@@ -96,6 +98,28 @@ function sendChatMessage() {
             return console.error(err.toString());
         });
     }
+}
+
+function convertAnyEmotes(message) {
+    return message.replace(emoteRegex, '<span class="emote $1" title="$1">$1</span>');
+}
+
+const htmlEscapes = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;',
+};
+// Regex containing the keys listed immediately above.
+const htmlEscaper = /[&<>"'\/]/g;
+
+// Escape a string for HTML interpolation.
+function htmlEscape(string) {
+    return ('' + string).replace(htmlEscaper, function (match) {
+        return htmlEscapes[match];
+    });
 }
 
 // WEBSOCKETS
@@ -159,6 +183,6 @@ connection.on('ReceiveMessage', function (userId, message) {
     const chatMessage = chatMessageTemplate.cloneNode(true);
     chatMessage.querySelector('.chat-message-user').textContent = users.filter(u => u.id === userId)[0].name;
     chatMessage.querySelector('.chat-message-user').style.backgroundColor = users.filter(u => u.id === userId)[0].color;
-    chatMessage.querySelector('.chat-message-text').textContent = message;
+    chatMessage.querySelector('.chat-message-text').innerHTML = convertAnyEmotes(htmlEscape(message));
     chatMessagesContainer.prepend(chatMessage);
 });

@@ -21,11 +21,15 @@ namespace SpeakingTime.Hubs
             _connectionService = connectionService;
         }
 
-        public async Task JoinRoom(CreateUserInputModel userInput, string roomId)
+        public async Task<object> JoinRoom(CreateUserInputModel userInput, string roomId)
         {
             User user;
             if(userInput.Id.HasValue)
             {
+                if(_connectionService.CheckIfUserAlreadyConnected(roomId, userInput.Id.Value))
+                {
+                    return new { success = false, message = "User already connected." };
+                }
                 user = _userService.GetUser(userInput.Id.Value);
             } 
             else
@@ -44,6 +48,8 @@ namespace SpeakingTime.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
             await Clients.Caller.SendAsync("AllowedIn", user);
             await Clients.Caller.SendAsync("UserList", connections.Select(c => c.User).ToList());
+
+            return new { success = true };
         }
 
         public async Task SendMessage(int userId, string message)
@@ -54,8 +60,11 @@ namespace SpeakingTime.Hubs
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             var connection = _connectionService.RemoveConnection(Context.ConnectionId);
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, connection.Room.RoomId);
-            await Clients.Group(connection.Room.RoomId).SendAsync("UserLeave", connection.UserId);
+            if(connection != null)
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, connection.Room.RoomId);
+                await Clients.Group(connection.Room.RoomId).SendAsync("UserLeave", connection.UserId);
+            }
             await base.OnDisconnectedAsync(exception);
         }
     }

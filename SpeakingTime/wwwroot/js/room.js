@@ -44,7 +44,7 @@ const emoteRegex = new RegExp('\\b(' + emotes.join('|') + ')\\b', 'g');
 let currentUser = null;
 
 // Setup Connection to hub
-const connection = new signalR.HubConnectionBuilder().withUrl('/roomhub').build();
+let connection = null;
 
 const roomUserList = document.getElementById('room-user-list');
 const chatMessagesContainer = document.getElementById('chat-messages');
@@ -125,64 +125,79 @@ function htmlEscape(string) {
 // WEBSOCKETS
 // Initiate Connection
 function InitiateConnection(user, roomId) {
+    connection = new signalR.HubConnectionBuilder().withUrl('/roomhub').build();
+    addConnectionListeners();
     connection.start().then(function () {
         // Send user info for room
-        connection.invoke('JoinRoom', user, roomId).catch(function (err) {
-            return console.error(err.toString());
+        connection.invoke('JoinRoom', user, roomId).then(function (response) {
+            if (response.success) {
+                
+            } else {
+                console.error(response.toString());
+
+                document.getElementById('error').classList.remove('hidden');
+                //// Unlock form
+                //document.getElementById('user-name-input').removeAttribute('disabled');
+                //document.getElementById('user-color-input').removeAttribute('disabled');
+                //document.getElementById('create-user-btn').removeAttribute('disabled');
+                //document.getElementById('create-user').classList.remove('hidden');
+            }
         });
     }).catch(function (err) {
         return console.error(err.toString());
     });
 }
 
-connection.on('UserList', function (_users) {
-    console.log(_users);
-    users = _users;
-    createUserList();
-});
+function addConnectionListeners() {
+    connection.on('UserList', function (_users) {
+        console.log(_users);
+        users = _users;
+        createUserList();
+    });
 
-connection.on('AllowedIn', function (user) {
-    localStorage.setItem('userId_' + roomId, user.id);
-    currentUser = user;
+    connection.on('AllowedIn', function (user) {
+        localStorage.setItem('userId_' + roomId, user.id);
+        currentUser = user;
 
-    // hide user form
-    document.getElementById('create-user').classList.add('hidden');
+        // hide user form
+        document.getElementById('create-user').classList.add('hidden');
 
-    // show main room
-    document.getElementById('room').classList.remove('hidden');
-});
+        // show main room
+        document.getElementById('room').classList.remove('hidden');
+    });
 
-connection.on('UserJoin', function (response) {
-    console.log(response);
-    users.push(response.user);
-    addUserToUserList(response.user);
+    connection.on('UserJoin', function (response) {
+        console.log(response);
+        users.push(response.user);
+        addUserToUserList(response.user);
 
-    const chatSignal = chatSignalTemplate.cloneNode(true);
-    chatSignal.querySelector('.chat-message-signal-text').textContent = response.user.name;
-    chatSignal.querySelector('.chat-message-signal-text').style.backgroundColor = response.user.color;
-    chatSignal.querySelector('.chat-message-signal-text').textContent = response.user.name + ' has joined';
-    chatMessagesContainer.prepend(chatSignal);
-});
+        const chatSignal = chatSignalTemplate.cloneNode(true);
+        chatSignal.querySelector('.chat-message-signal-text').textContent = response.user.name;
+        chatSignal.querySelector('.chat-message-signal-text').style.backgroundColor = response.user.color;
+        chatSignal.querySelector('.chat-message-signal-text').textContent = response.user.name + ' has joined';
+        chatMessagesContainer.prepend(chatSignal);
+    });
 
-connection.on('UserLeave', function (userId) {
-    console.log(userId, ' left');
-    const user = users.filter(u => u.id === userId)[0];
-    users = users.filter(u => u.id !== userId);
-    removeUserFromUserList(userId);
+    connection.on('UserLeave', function (userId) {
+        console.log(userId, ' left');
+        const user = users.filter(u => u.id === userId)[0];
+        users = users.filter(u => u.id !== userId);
+        removeUserFromUserList(userId);
 
 
-    const chatSignal = chatSignalTemplate.cloneNode(true);
-    chatSignal.querySelector('.chat-message-signal-text').textContent = user.name;
-    chatSignal.querySelector('.chat-message-signal-text').style.backgroundColor = user.color;
-    chatSignal.querySelector('.chat-message-signal-text').textContent = user.name + ' has left';
-    chatMessagesContainer.prepend(chatSignal);
-});
+        const chatSignal = chatSignalTemplate.cloneNode(true);
+        chatSignal.querySelector('.chat-message-signal-text').textContent = user.name;
+        chatSignal.querySelector('.chat-message-signal-text').style.backgroundColor = user.color;
+        chatSignal.querySelector('.chat-message-signal-text').textContent = user.name + ' has left';
+        chatMessagesContainer.prepend(chatSignal);
+    });
 
-connection.on('ReceiveMessage', function (userId, message) {
-    console.log(userId, message);
-    const chatMessage = chatMessageTemplate.cloneNode(true);
-    chatMessage.querySelector('.chat-message-user').textContent = users.filter(u => u.id === userId)[0].name;
-    chatMessage.querySelector('.chat-message-user').style.backgroundColor = users.filter(u => u.id === userId)[0].color;
-    chatMessage.querySelector('.chat-message-text').innerHTML = convertAnyEmotes(htmlEscape(message));
-    chatMessagesContainer.prepend(chatMessage);
-});
+    connection.on('ReceiveMessage', function (userId, message) {
+        console.log(userId, message);
+        const chatMessage = chatMessageTemplate.cloneNode(true);
+        chatMessage.querySelector('.chat-message-user').textContent = users.filter(u => u.id === userId)[0].name;
+        chatMessage.querySelector('.chat-message-user').style.backgroundColor = users.filter(u => u.id === userId)[0].color;
+        chatMessage.querySelector('.chat-message-text').innerHTML = convertAnyEmotes(htmlEscape(message));
+        chatMessagesContainer.prepend(chatMessage);
+    });
+}

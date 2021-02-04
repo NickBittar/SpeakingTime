@@ -38,6 +38,15 @@ namespace SpeakingTime.Services
             return connection;
         }
 
+        public bool CheckIfUserAlreadyConnected(string roomId, int userId)
+        {
+            return DbContext.Connections
+                .Include(c => c.Room)
+                .Any(c => c.Room.RoomId == roomId 
+                    && c.UserId == userId 
+                    && c.DeletedDateTime == null);
+        }
+
         public Connection GetConnection(string connectionId)
         {
             var connection = DbContext.Connections

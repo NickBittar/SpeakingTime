@@ -14,5 +14,6 @@ namespace SpeakingTime.Services
         Connection GetConnection(string connectionId);
         List<Connection> GetConnections(bool getDeleted = false);
         List<Connection> GetRoomConnections(string roomId, bool getDeleted = false);
+        bool CheckIfUserAlreadyConnected(string roomId, int userId);
     }
 }

@@ -32,6 +32,7 @@ namespace SpeakingTime.Controllers
             {
                 RoomId = room.RoomId,
                 RoomName = room.RoomName,
+                Emotes = new List<string> { "LUL", "Wowee", "OMEGALUL", "PepoTurkey" },
             };
             return View("Room", model);
         }

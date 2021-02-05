@@ -9,5 +9,6 @@ namespace SpeakingTime.Models
     {
         public string RoomId { get; set; }
         public string RoomName { get; set; }
+        public List<string> Emotes { get; set; }
     }
 }

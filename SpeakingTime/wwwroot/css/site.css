@@ -57,6 +57,7 @@ body {
     overflow-y: scroll;
     flex-direction: column-reverse;
     display: flex;
+    padding: 4px;
 }
 .chat-text-box-container {
     padding: 4px;
@@ -66,7 +67,7 @@ body {
     background-color: white;
 }
 .chat-message {
-    margin: 4px;
+    margin: 4px 0px;
     padding: 4px;
 }
 .chat-signal {
@@ -84,4 +85,29 @@ body {
 }
 .chat-message-user.color-tag:active {
     box-shadow: 0px 0px 0px 1px black, 0px 0px 0px 2px white, 0 0 0 3px black;
+}
+.chat-box {
+    position: relative;
+}
+#emotes-menu {
+    position: absolute;
+    bottom: 54px;
+    background: #3c3c3c;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(8, 1fr);
+    justify-items: center;
+    padding: 10px;
+    z-index: 100;
+    margin: 4px;
+    width: calc(100% - 8px);
+    transition: bottom 200ms ease, opacity 250ms ease;
+}
+#emotes-menu.hidden {
+    bottom: 16px;
+    opacity: 0;
+    pointer-events: none;
+}
+#emotes-menu .emote {
+    cursor: pointer;
 }

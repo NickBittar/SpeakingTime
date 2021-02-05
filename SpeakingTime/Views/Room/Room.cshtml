@@ -49,11 +49,17 @@
                         </div>
 
                     </div>
+                    <div id="emotes-menu" class="hidden">
+                        @foreach (var emote in Model.Emotes)
+                        {
+                            <div class="emote @emote" title="@emote">@emote</div>
+                        }
+                    </div>
                     <div class="chat-text-box-container">
                         <div class="input-group mb-3">
                             <input type="text" id="chat-text-box" class="form-control" placeholder="Type something..." />
-                            <button class="btn btn-outline-secondary" type="button" id="chat-text-box-btn"><i class="bi bi-emoji-smile"></i></button>
-                            <button class="btn btn-outline-secondary" type="button" id="chat-text-box-btn"><i class="bi bi-chat-dots"></i></button>
+                            <button class="btn btn-outline-secondary" type="button" id="chat-text-box-emote-btn"><i class="bi bi-emoji-smile"></i></button>
+                            <button class="btn btn-outline-secondary" type="button" id="chat-text-box-send-btn"><i class="bi bi-chat-dots"></i></button>
                         </div>
                     </div>
                 </div>

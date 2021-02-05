@@ -14,5 +14,7 @@ namespace SpeakingTime.Services
         Room GetRoom(int id);
         Room CreateRoom(CreateRoomInputModel input);
         void AddUserToRoom(string roomId, User user);
+        Message AddMessageToRoom(string roomId, int userId, string text);
+        List<Message> GetRoomChatHistory(int roomId, DateTime time);
     }
 }

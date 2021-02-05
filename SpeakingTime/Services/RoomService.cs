@@ -19,6 +19,27 @@ namespace SpeakingTime.Services
             DbContext = context;
         }
 
+        public Message AddMessageToRoom(string roomId, int userId, string text)
+        {
+            var room = DbContext.Rooms.FirstOrDefault(r => r.RoomId == roomId);
+            if(room != null)
+            {
+                var message = new Message
+                {
+                    FromUserId = userId,
+                    RoomId = room.Id,
+                    Text = text,
+
+                    CreatedDateTime = DateTime.UtcNow,
+                    UpdatedDateTime = DateTime.UtcNow,
+                };
+                DbContext.Messages.Add(message);
+                DbContext.SaveChanges();
+                return message;
+            }
+            return null;
+        }
+
         public void AddUserToRoom(string roomId, User user)
         {
             var room = DbContext.Rooms
@@ -73,6 +94,15 @@ namespace SpeakingTime.Services
         public Room GetRoom(int id)
         {
             return DbContext.Rooms.FirstOrDefault(r => r.Id == id);
+        }
+
+        public List<Message> GetRoomChatHistory(int roomId, DateTime time)
+        {
+            return DbContext.Messages
+                .Where(m => m.RoomId == roomId 
+                    && m.CreatedDateTime <= time)
+                .OrderBy(m => m.CreatedDateTime)
+                .ToList();
         }
 
         public List<Room> GetRooms()

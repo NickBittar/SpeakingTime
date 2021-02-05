@@ -48,13 +48,17 @@ namespace SpeakingTime.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
             await Clients.Caller.SendAsync("AllowedIn", user);
             await Clients.Caller.SendAsync("UserList", connections.Select(c => c.User).ToList());
+            await Clients.Caller.SendAsync("AllUsersList", _userService.GetUsersInRoom(roomId));
 
-            return new { success = true };
+            var chatHistory = _roomService.GetRoomChatHistory(room.Id, DateTime.UtcNow);
+
+            return new { success = true, chatHistory = chatHistory.Select(m => new { m.FromUserId, m.Text, m.CreatedDateTime }) };
         }
 
-        public async Task SendMessage(int userId, string message)
+        public async Task SendMessage(string roomId, int userId, string text)
         {
-            await Clients.All.SendAsync("ReceiveMessage", userId, message);
+            var message = _roomService.AddMessageToRoom(roomId, userId, text);
+            await Clients.All.SendAsync("ReceiveMessage", new { message.FromUserId, message.Text, message.CreatedDateTime });
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)

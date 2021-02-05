@@ -13,6 +13,7 @@ const chatSignalTemplate = document.getElementById('chat-signal-template').first
 
 // User list
 let users = [];
+let allRoomUsers = [];
 let currentUser = null;
 
 // Get emotes
@@ -60,7 +61,7 @@ function removeUserFromUserList(userId) {
 function sendChatMessage() {
     let message = chatTextBox.value.trim().replace(/\s+/g, ' ');
     if (message !== '') {
-        connection.invoke('SendMessage', currentUser.id, message).then(function () {
+        connection.invoke('SendMessage', roomId, currentUser.id, message).then(function () {
             chatTextBox.value = '';
         }).catch(function (err) {
             return console.error(err.toString());
@@ -71,6 +72,18 @@ function sendChatMessage() {
     chatTextBoxEmoteBtn.classList.add('btn-outline-secondary');
     chatTextBoxEmoteBtn.classList.remove('btn-secondary');
     emotesMenu.classList.add('hidden');
+}
+
+function addMessage(message, oldMessage = false) {
+    const chatMessage = chatMessageTemplate.cloneNode(true);
+    chatMessage.querySelector('.chat-message-user').textContent = allRoomUsers.filter(u => u.id === message.fromUserId)[0].name;
+    chatMessage.querySelector('.chat-message-user').style.backgroundColor = allRoomUsers.filter(u => u.id === message.fromUserId)[0].color;
+    chatMessage.querySelector('.chat-message-text').innerHTML = convertAnyEmotes(htmlEscape(message.text));
+    if (oldMessage) {
+        chatMessagesContainer.append(chatMessage);
+    } else {
+        chatMessagesContainer.prepend(chatMessage);
+    }
 }
 
 function addTextToChatBox(text) {
@@ -182,7 +195,13 @@ function InitiateConnection(user, roomId) {
         // Send user info for room
         connection.invoke('JoinRoom', user, roomId).then(function (response) {
             if (response.success) {
-                
+                if (response.chatHistory.length === 0) {
+                    chatMessagesContainer.querySelector('.divider.new-messages-line').remove();
+                } else {
+                    for (let message of response.chatHistory) {
+                        addMessage(message, true);
+                    }
+                }
             } else {
                 console.error(response.toString());
 
@@ -200,10 +219,14 @@ function InitiateConnection(user, roomId) {
 }
 
 function addConnectionListeners() {
-    connection.on('UserList', function (_users) {
-        console.log(_users);
-        users = _users;
+    connection.on('UserList', function (userList) {
+        console.log(userList);
+        users = userList;
         createUserList();
+    });
+    connection.on('AllUsersList', function (allUsersList) {
+        console.log(allUsersList);
+        allRoomUsers = allUsersList;
     });
 
     connection.on('AllowedIn', function (user) {
@@ -220,6 +243,9 @@ function addConnectionListeners() {
     connection.on('UserJoin', function (response) {
         console.log(response);
         users.push(response.user);
+        if (allRoomUsers.filter(u => u.id === response.user.id).length === 0) {
+            allRoomUsers.push(response.user);
+        }
         addUserToUserList(response.user);
 
         const chatSignal = chatSignalTemplate.cloneNode(true);
@@ -243,12 +269,8 @@ function addConnectionListeners() {
         chatMessagesContainer.prepend(chatSignal);
     });
 
-    connection.on('ReceiveMessage', function (userId, message) {
-        console.log(userId, message);
-        const chatMessage = chatMessageTemplate.cloneNode(true);
-        chatMessage.querySelector('.chat-message-user').textContent = users.filter(u => u.id === userId)[0].name;
-        chatMessage.querySelector('.chat-message-user').style.backgroundColor = users.filter(u => u.id === userId)[0].color;
-        chatMessage.querySelector('.chat-message-text').innerHTML = convertAnyEmotes(htmlEscape(message));
-        chatMessagesContainer.prepend(chatMessage);
+    connection.on('ReceiveMessage', function (message) {
+        console.log(message);
+        addMessage(message);
     });
 }

@@ -29,9 +29,9 @@
                 <td>@room.OwnerUser?.Name</td>
                 <td>@room.Users?.Count</td>
                 <td>@Model.Connections.Count(c => c.RoomId == room.Id && c.DeletedDateTime == null)/@Model.Connections.Count(c => c.RoomId == room.Id)</td>
-                <td>@room.CreatedDateTime.ToString()</td>
-                <td>@room.UpdatedDateTime.ToString()</td>
-                <td>@room.DeletedDateTime?.ToString()</td>
+                <td><local-date-time-string date-time="room.CreatedDateTime"></local-date-time-string></td>
+                <td><local-date-time-string date-time="room.UpdatedDateTime"></local-date-time-string></td>
+                <td><local-date-time-string date-time="room.DeletedDateTime"></local-date-time-string></td>
             </tr>
             }
         </tbody>

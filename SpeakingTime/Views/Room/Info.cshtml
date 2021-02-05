@@ -50,9 +50,33 @@
                         <td>@user.Id</td>
                         <td>@user.Name</td>
                         <td><span class="black-outlined color-tag font-monospace" style="background-color: @user.Color;">@user.Color</span></td>
-                        <td>@user.CreatedDateTime.ToString()</td>
-                        <td>@user.UpdatedDateTime.ToString()</td>
-                        <td>@user.DeletedDateTime?.ToString()</td>
+                        <td>
+                            <script>
+                                (function () {
+                                    let date = new Date('@user.CreatedDateTime.ToString("u")');
+                                    document.write(date.toLocaleString());
+                                })();
+                            </script>
+                        </td>
+                        <td>
+                            <script>
+                                (function () {
+                                    let date = new Date('@user.UpdatedDateTime.ToString("u")');
+                                    document.write(date.toLocaleString());
+                                })();
+                            </script>
+                        </td>
+                        <td>
+                            @if (user.DeletedDateTime.HasValue)
+                            {
+                                <script>
+                                (function () {
+                                    let date = new Date('@user.DeletedDateTime.Value.ToString("u")');
+                                    document.write(date.toLocaleString());
+                                })();
+                                </script>
+                            }
+                        </td>
                     </tr>
                     }
                 </tbody>
@@ -81,9 +105,9 @@
                         <td>@connection.ConnectionId</td>
                         <td>@connection.UserId</td>
                         <td><div class="color-tag" style="background-color: @connection.User?.Color;"></div> @connection.User?.Name</td>
-                        <td>@connection.CreatedDateTime.ToString()</td>
-                        <td>@connection.UpdatedDateTime.ToString()</td>
-                        <td>@connection.DeletedDateTime?.ToString()</td>
+                        <td><local-date-time-string date-time="connection.CreatedDateTime"></local-date-time-string></td>
+                        <td><local-date-time-string date-time="connection.UpdatedDateTime"></local-date-time-string> </td>
+                        <td><local-date-time-string date-time="connection.DeletedDateTime"></local-date-time-string></td>
                     </tr>
                     }
                 </tbody>

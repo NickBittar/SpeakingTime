@@ -101,7 +101,7 @@ namespace SpeakingTime.Services
             return DbContext.Messages
                 .Where(m => m.RoomId == roomId 
                     && m.CreatedDateTime <= time)
-                .OrderBy(m => m.CreatedDateTime)
+                .OrderByDescending(m => m.CreatedDateTime)
                 .ToList();
         }
 

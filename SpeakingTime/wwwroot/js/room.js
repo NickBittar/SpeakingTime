@@ -36,7 +36,6 @@ function init() {
     }
 }
 
-
 function createUserList() {
     roomUserList.innerHTML = '';
     for (let user of users) {
@@ -79,8 +78,9 @@ function sendChatMessage() {
 
 function addMessage(message, oldMessage = false) {
     const chatMessage = chatMessageTemplate.cloneNode(true);
-    chatMessage.querySelector('.chat-message-user').textContent = allRoomUsers.filter(u => u.id === message.fromUserId)[0].name;
-    chatMessage.querySelector('.chat-message-user').style.backgroundColor = allRoomUsers.filter(u => u.id === message.fromUserId)[0].color;
+    const user = allRoomUsers.find(u => u.id === message.fromUserId);
+    chatMessage.querySelector('.chat-message-user').textContent = user.name;
+    chatMessage.querySelector('.chat-message-user').style.backgroundColor = user.color;
     chatMessage.querySelector('.chat-message-text').innerHTML = convertAnyEmotes(htmlEscape(message.text));
     if (oldMessage) {
         chatMessagesContainer.append(chatMessage);
@@ -128,6 +128,16 @@ function convertAnyEmotes(message) {
 
 const currentSpeakerTimer = {
     currentInterval: null,
+    countDownTimeRemaining: function (elem, endTime) {
+        if (currentSpeakerTimer.currentInterval !== null) {
+            currentSpeakerTimer.stopCurrentCountdown();
+        }
+        const alwaysDisplayHours = ((endTime - new Date()) / (1000 * 60 * 60) >= 1);
+        currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
+        currentSpeakerTimer.currentInterval = setInterval(function () {
+            currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
+        }, 1000);
+    },
     updateTimeRemaining: function (elem, endTime, alwaysDisplayHours) {
         const secondsRemaining = Math.round((endTime - new Date()) / 1000);
         if (secondsRemaining < 0) {
@@ -140,16 +150,6 @@ const currentSpeakerTimer = {
         clearInterval(currentSpeakerTimer.currentInterval);
         currentSpeakerTimer.currentInterval = null;
     },
-    countDownTimeRemaining: function(elem, endTime) {
-        if (currentSpeakerTimer.currentInterval !== null) {
-            currentSpeakerTimer.stopCurrentCountdown();
-        }
-        const alwaysDisplayHours = ( (endTime - new Date()) / (1000 * 60 * 60) >= 1 );
-        currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
-        currentSpeakerTimer.currentInterval = setInterval(function () {
-            currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
-        }, 1000);
-    },
 };
 
 
@@ -160,14 +160,15 @@ function convertSecondsToTime(seconds, displayHours = null) {
     hour = Math.floor(hour);
     min = Math.floor(min);
     sec = Math.floor(sec);
-    let timeString = '';
+    const timeParts = [];
     if (hour > 0 || displayHours === true) {
-        timeString = hour.toString() + ':' + min.toString().padStart(2, '0') + ':';
+        timeParts.push(hour.toString());
+        timeParts.push(min.toString().padStart(2, '0'));
     } else {
-        timeString += min.toString() + ':';
+        timeParts.push(min.toString());
     }
-    timeString += sec.toString().padStart(2, '0');
-    return timeString;
+    timeParts.push(sec.toString().padStart(2, '0'));
+    return timeParts.join(':');
 }
 
 const htmlEscapes = {
@@ -260,11 +261,6 @@ function InitiateConnection(user, roomId) {
                 console.error(response.toString());
 
                 document.getElementById('error').classList.remove('hidden');
-                //// Unlock form
-                //document.getElementById('user-name-input').removeAttribute('disabled');
-                //document.getElementById('user-color-input').removeAttribute('disabled');
-                //document.getElementById('create-user-btn').removeAttribute('disabled');
-                //document.getElementById('create-user').classList.remove('hidden');
             }
         });
     }).catch(function (err) {
@@ -297,7 +293,7 @@ function addConnectionListeners() {
     connection.on('UserJoin', function (response) {
         console.log(response);
         users.push(response.user);
-        if (allRoomUsers.filter(u => u.id === response.user.id).length === 0) {
+        if (!allRoomUsers.some(u => u.id === response.user.id)) {
             allRoomUsers.push(response.user);
         }
         addUserToUserList(response.user);
@@ -311,10 +307,9 @@ function addConnectionListeners() {
 
     connection.on('UserLeave', function (userId) {
         console.log(userId, ' left');
-        const user = users.filter(u => u.id === userId)[0];
+        const user = users.find(u => u.id === userId);
         users = users.filter(u => u.id !== userId);
         removeUserFromUserList(userId);
-
 
         const chatSignal = chatSignalTemplate.cloneNode(true);
         chatSignal.querySelector('.chat-message-signal-text').textContent = user.name;
@@ -331,7 +326,7 @@ function addConnectionListeners() {
     connection.on('NewSpeaker', function (response) {
         console.log(arguments);
         const newSpeakerElem = document.getElementById('current-speaker');
-        const user = allRoomUsers.filter(u => u.id === response.userId)[0];
+        const user = allRoomUsers.find(u => u.id === response.userId);
         newSpeakerElem.querySelector('.current-speaker-name').textContent = user.name;
         if (response.endTime !== null) {
             currentSpeakerTimer.countDownTimeRemaining(newSpeakerElem.querySelector('.current-speaker-time-remaining'), new Date(response.endTime));

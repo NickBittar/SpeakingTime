@@ -58,7 +58,7 @@ namespace SpeakingTime.Hubs
         public async Task SendMessage(string roomId, int userId, string text)
         {
             var message = _roomService.AddMessageToRoom(roomId, userId, text);
-            await Clients.All.SendAsync("ReceiveMessage", new { message.FromUserId, message.Text, message.CreatedDateTime });
+            await Clients.Group(roomId).SendAsync("ReceiveMessage", new { message.FromUserId, message.Text, message.CreatedDateTime });
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)

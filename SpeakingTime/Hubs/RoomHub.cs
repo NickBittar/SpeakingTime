@@ -49,6 +49,7 @@ namespace SpeakingTime.Hubs
             await Clients.Caller.SendAsync("AllowedIn", user);
             await Clients.Caller.SendAsync("UserList", connections.Select(c => c.User).ToList());
             await Clients.Caller.SendAsync("AllUsersList", _userService.GetUsersInRoom(roomId));
+            await Clients.Caller.SendAsync("NewSpeaker", new { userId = room.CurrentSpeakerUserId, endTime = room.CurrentSpeakerEndTime });
 
             var chatHistory = _roomService.GetRoomChatHistory(room.Id, DateTime.UtcNow);
 
@@ -68,6 +69,7 @@ namespace SpeakingTime.Hubs
             {
                 endTime = DateTime.UtcNow.AddSeconds(duration.Value);
             }
+            _roomService.SetCurrentSpeaker(roomId, userId, endTime);
             await Clients.Group(roomId).SendAsync("NewSpeaker", new { userId, endTime });
         }
 

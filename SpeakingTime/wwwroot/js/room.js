@@ -145,7 +145,7 @@ const currentSpeakerTimer = {
             currentSpeakerTimer.stopCurrentCountdown();
         }
         const alwaysDisplayHours = ( (endTime - new Date()) / (1000 * 60 * 60) >= 1 );
-        currentSpeakerTimer.updateTimeRemaining(elem, endTime);
+        currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
         currentSpeakerTimer.currentInterval = setInterval(function () {
             currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
         }, 1000);

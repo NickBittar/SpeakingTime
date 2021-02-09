@@ -11,6 +11,9 @@ namespace SpeakingTime.Data.Models
         public string RoomName { get; set; }
         public int OwnerUserId { get; set; }
 
+        public int? CurrentSpeakerUserId { get; set; }
+        public DateTime? CurrentSpeakerEndTime { get; set; }
+
         public User OwnerUser { get; set; }
         public List<User> Users { get; set; }
     }

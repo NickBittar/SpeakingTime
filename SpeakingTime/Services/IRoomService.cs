@@ -16,5 +16,6 @@ namespace SpeakingTime.Services
         void AddUserToRoom(string roomId, User user);
         Message AddMessageToRoom(string roomId, int userId, string text);
         List<Message> GetRoomChatHistory(int roomId, DateTime time);
+        void SetCurrentSpeaker(string roomId, int userId, DateTime? endTime);
     }
 }

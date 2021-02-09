@@ -113,5 +113,16 @@ namespace SpeakingTime.Services
                 .ToList();
             return rooms;
         }
+
+        public void SetCurrentSpeaker(string roomId, int userId, DateTime? endTime)
+        {
+            var room = DbContext.Rooms.FirstOrDefault(r => r.RoomId == roomId);
+            if(room != null)
+            {
+                room.CurrentSpeakerUserId = userId;
+                room.CurrentSpeakerEndTime = endTime;
+                DbContext.SaveChanges();
+            }
+        }
     }
 }

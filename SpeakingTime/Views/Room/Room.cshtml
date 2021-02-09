@@ -30,9 +30,26 @@
     </div>
     <div id="room" class="room-container hidden">
         <div class="row">
-            <div class="col-4 bg-dark">
+
+            <div class="col-4 speaker-container">
+
+                <div id="current-speaker" class="row bg-white shadow-sm p-2">
+                    <h4>Current Speaker <i class="bi bi-megaphone"></i> <button class="btn btn-sm btn-outline-dark bi bi-x float-end"></button></h4>
+                    <div class="col">
+                        <span class="current-speaker-name"></span>
+                    </div>
+                    <div class="col" title="Time Remaining">
+                        <i class="bi bi-alarm"></i>
+                        <span class="current-speaker-time-remaining">0:00</span>
+                    </div>
+                </div>
+                <hr />
+                <div id="speaker-queue">
+
+                </div>
 
             </div>
+
             <div class="col-4">
                 <div class="chat-box">
                     <div id="chat-messages">
@@ -86,10 +103,10 @@
 
 <div id="templates" class="d-none">
     <div id="user-list-item-template">
-        <div class="user-list-item p-2 bg-light shadow-sm row">
+        <div class="user-list-item p-2 bg-white shadow-sm row">
             <div class="user-list-item-name col"></div>
             <div class="col">
-                <button class="btn btn-outline-primary"><i class="bi bi-megaphone"></i></button>
+                <button class="btn btn-outline-primary make-speaker-btn"><i class="bi bi-megaphone"></i></button>
             </div>
             <div class="col">
                 <button class="btn btn-outline-secondary" title="Promote to owner"><i class="bi bi-star"></i></button>

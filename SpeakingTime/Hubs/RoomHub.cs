@@ -61,6 +61,16 @@ namespace SpeakingTime.Hubs
             await Clients.Group(roomId).SendAsync("ReceiveMessage", new { message.FromUserId, message.Text, message.CreatedDateTime });
         }
 
+        public async Task MakeSpeaker(string roomId, int userId, int? duration)
+        {
+            DateTime? endTime = null;
+            if(duration.HasValue)
+            {
+                endTime = DateTime.UtcNow.AddSeconds(duration.Value);
+            }
+            await Clients.Group(roomId).SendAsync("NewSpeaker", new { userId, endTime });
+        }
+
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             var connection = _connectionService.RemoveConnection(Context.ConnectionId);

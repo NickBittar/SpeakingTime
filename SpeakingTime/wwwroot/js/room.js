@@ -52,6 +52,9 @@ function addUserToUserList(user) {
     if (user.id === currentUser.id) {
         userListItem.classList.add('current-user');
     }
+    userListItem.setAttribute('data-user-id', user.id);
+    userListItem.querySelector('.make-speaker-btn').setAttribute('data-user-id', user.id);
+    userListItem.querySelector('.make-speaker-btn').addEventListener('click', () => makeSpeakerBtnClick(user.id));
     roomUserList.appendChild(userListItem);
 }
 function removeUserFromUserList(userId) {
@@ -123,6 +126,50 @@ function convertAnyEmotes(message) {
     return message.replace(emoteRegex, '<span class="emote $1" title="$1">$1</span>');
 }
 
+const currentSpeakerTimer = {
+    currentInterval: null,
+    updateTimeRemaining: function (elem, endTime, alwaysDisplayHours) {
+        const secondsRemaining = Math.round((endTime - new Date()) / 1000);
+        if (secondsRemaining < 0) {
+            currentSpeakerTimer.stopCurrentCountdown();
+            return;
+        }
+        elem.textContent = convertSecondsToTime(Math.max(0, secondsRemaining), alwaysDisplayHours);
+    },
+    stopCurrentCountdown: function() {
+        clearInterval(currentSpeakerTimer.currentInterval);
+        currentSpeakerTimer.currentInterval = null;
+    },
+    countDownTimeRemaining: function(elem, endTime) {
+        if (currentSpeakerTimer.currentInterval !== null) {
+            currentSpeakerTimer.stopCurrentCountdown();
+        }
+        const alwaysDisplayHours = ( (endTime - new Date()) / (1000 * 60 * 60) >= 1 );
+        currentSpeakerTimer.updateTimeRemaining(elem, endTime);
+        currentSpeakerTimer.currentInterval = setInterval(function () {
+            currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
+        }, 1000);
+    },
+};
+
+
+function convertSecondsToTime(seconds, displayHours = null) {
+    let hour = seconds / (60 * 60);
+    let min = (hour - Math.floor(hour)) * 60;
+    let sec = (min - Math.floor(min)) * 60;
+    hour = Math.floor(hour);
+    min = Math.floor(min);
+    sec = Math.floor(sec);
+    let timeString = '';
+    if (hour > 0 || displayHours === true) {
+        timeString = hour.toString() + ':' + min.toString().padStart(2, '0') + ':';
+    } else {
+        timeString += min.toString() + ':';
+    }
+    timeString += sec.toString().padStart(2, '0');
+    return timeString;
+}
+
 const htmlEscapes = {
     '&': '&amp;',
     '<': '&lt;',
@@ -185,6 +232,13 @@ emotesMenu.addEventListener('click', function (e) {
         addTextToChatBox(emoteName);
     }
 });
+function makeSpeakerBtnClick(userId) {
+    connection.invoke('MakeSpeaker', roomId, userId, 10).then(function () {
+        
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+}
 
 // WEBSOCKETS
 // Initiate Connection
@@ -272,5 +326,16 @@ function addConnectionListeners() {
     connection.on('ReceiveMessage', function (message) {
         console.log(message);
         addMessage(message);
+    });
+
+    connection.on('NewSpeaker', function (response) {
+        console.log(arguments);
+        const newSpeakerElem = document.getElementById('current-speaker');
+        const user = allRoomUsers.filter(u => u.id === response.userId)[0];
+        newSpeakerElem.querySelector('.current-speaker-name').textContent = user.name;
+        if (response.endTime !== null) {
+            currentSpeakerTimer.countDownTimeRemaining(newSpeakerElem.querySelector('.current-speaker-time-remaining'), new Date(response.endTime));
+        }
+        newSpeakerElem.style.borderColor = user.color;
     });
 }

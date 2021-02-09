@@ -41,6 +41,7 @@
                     <div class="col" title="Time Remaining">
                         <i class="bi bi-alarm"></i>
                         <span class="current-speaker-time-remaining">0:00</span>
+                        <div id="timer-circle"></div>
                     </div>
                 </div>
                 <hr />
@@ -90,6 +91,10 @@
                 </div>
             </div>
             <div class="col-4">
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="speaking-time-duration" placeholder="Speaking Time Duration" min="0" value="10">
+                    <label for="speaking-time-duration" class="form-label">Speaking Time Duration</label>
+                </div>
                 <div id="room-user-list" class="d-grid gap-2">
                 </div>
             </div>

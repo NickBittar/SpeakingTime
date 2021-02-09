@@ -128,23 +128,28 @@ function convertAnyEmotes(message) {
 
 const currentSpeakerTimer = {
     currentInterval: null,
-    countDownTimeRemaining: function (elem, endTime) {
+    countDownTimeRemaining: function (elem, endTime, duration) {
         if (currentSpeakerTimer.currentInterval !== null) {
             currentSpeakerTimer.stopCurrentCountdown();
         }
         const alwaysDisplayHours = ((endTime - new Date()) / (1000 * 60 * 60) >= 1);
-        currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
+        currentSpeakerTimer.updateTimeRemaining(elem, endTime, duration, alwaysDisplayHours);
         currentSpeakerTimer.currentInterval = setInterval(function () {
-            currentSpeakerTimer.updateTimeRemaining(elem, endTime, alwaysDisplayHours);
+            currentSpeakerTimer.updateTimeRemaining(elem, endTime, duration, alwaysDisplayHours);
         }, 1000);
     },
-    updateTimeRemaining: function (elem, endTime, alwaysDisplayHours) {
+    updateTimeRemaining: function (elem, endTime, duration, alwaysDisplayHours) {
         const secondsRemaining = Math.round((endTime - new Date()) / 1000);
         if (secondsRemaining < 0) {
             currentSpeakerTimer.stopCurrentCountdown();
             return;
         }
         elem.textContent = convertSecondsToTime(Math.max(0, secondsRemaining), alwaysDisplayHours);
+
+        // Update timer circle
+        const timerCircle = document.getElementById('timer-circle');
+        const percentComplete = (secondsRemaining / duration).toFixed(4);
+        timerCircle.style.background = `conic-gradient(#b1bac3 ${1 - percentComplete}turn, #f8f9fa 0turn)`;
     },
     stopCurrentCountdown: function() {
         clearInterval(currentSpeakerTimer.currentInterval);
@@ -234,7 +239,8 @@ emotesMenu.addEventListener('click', function (e) {
     }
 });
 function makeSpeakerBtnClick(userId) {
-    connection.invoke('MakeSpeaker', roomId, userId, 10).then(function () {
+    const duration = parseInt(document.getElementById('speaking-time-duration').value);
+    connection.invoke('MakeSpeaker', roomId, userId, duration).then(function () {
         
     }).catch(function (err) {
         return console.error(err.toString());
@@ -329,7 +335,7 @@ function addConnectionListeners() {
         const user = allRoomUsers.find(u => u.id === response.userId);
         newSpeakerElem.querySelector('.current-speaker-name').textContent = user.name;
         if (response.endTime !== null) {
-            currentSpeakerTimer.countDownTimeRemaining(newSpeakerElem.querySelector('.current-speaker-time-remaining'), new Date(response.endTime));
+            currentSpeakerTimer.countDownTimeRemaining(newSpeakerElem.querySelector('.current-speaker-time-remaining'), new Date(response.endTime), response.duration);
         }
         newSpeakerElem.style.borderColor = user.color;
     });

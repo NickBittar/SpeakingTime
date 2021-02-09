@@ -114,13 +114,14 @@ namespace SpeakingTime.Services
             return rooms;
         }
 
-        public void SetCurrentSpeaker(string roomId, int userId, DateTime? endTime)
+        public void SetCurrentSpeaker(string roomId, int userId, DateTime? endTime, int? duration)
         {
             var room = DbContext.Rooms.FirstOrDefault(r => r.RoomId == roomId);
             if(room != null)
             {
                 room.CurrentSpeakerUserId = userId;
                 room.CurrentSpeakerEndTime = endTime;
+                room.CurrentSpeakerDuration = duration;
                 DbContext.SaveChanges();
             }
         }

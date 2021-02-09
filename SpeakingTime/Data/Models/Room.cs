@@ -13,6 +13,7 @@ namespace SpeakingTime.Data.Models
 
         public int? CurrentSpeakerUserId { get; set; }
         public DateTime? CurrentSpeakerEndTime { get; set; }
+        public int? CurrentSpeakerDuration { get; set; }
 
         public User OwnerUser { get; set; }
         public List<User> Users { get; set; }

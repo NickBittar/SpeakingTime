@@ -31,7 +31,7 @@
     <div id="room" class="room-container hidden">
         <div class="row">
 
-            <div class="col-4 speaker-container">
+            <div class="col-xl-4 speaker-container">
 
                 <div id="current-speaker" class="row bg-white shadow-sm p-2">
                     <h4>Current Speaker <i class="bi bi-megaphone"></i> <button class="btn btn-sm btn-outline-dark bi bi-x float-end"></button></h4>
@@ -51,8 +51,9 @@
 
             </div>
 
-            <div class="col-4">
-                <div class="chat-box">
+            <div class="col-xl-4 col-md-6 my-2">
+                <button id="hide-chat-button" class="btn btn-secondary w-100">Hide Chat</button>
+                <div id="chat-container" class="chat-box my-2">
                     <div id="chat-messages">
 
                         <div class="divider new-messages-line text-danger position-relative user-select-none">
@@ -79,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-xl-4 col-md-6">
                 <div class="form-floating mb-3">
                     <input type="number" class="form-control" id="speaking-time-duration" placeholder="Speaking Time Duration" min="0" value="10">
                     <label for="speaking-time-duration" class="form-label">Speaking Time Duration</label>

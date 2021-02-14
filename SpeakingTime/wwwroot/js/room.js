@@ -246,6 +246,14 @@ function makeSpeakerBtnClick(userId) {
         return console.error(err.toString());
     });
 }
+document.getElementById('hide-chat-button').addEventListener('click', function (e) {
+    document.getElementById('chat-container').classList.toggle('hidden');
+    if (document.getElementById('chat-container').classList.contains('hidden')) {
+        document.getElementById('hide-chat-button').innerText = 'Show Chat';
+    } else {
+        document.getElementById('hide-chat-button').innerText = 'Hide Chat';
+    }
+});
 
 // WEBSOCKETS
 // Initiate Connection
